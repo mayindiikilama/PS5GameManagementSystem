@@ -1,0 +1,6 @@
+@SIGameCatalogueService_HostAddress = http://localhost:5036
+
+GET {{SIGameCatalogueService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

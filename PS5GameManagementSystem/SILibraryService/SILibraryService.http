@@ -1,0 +1,6 @@
+@SILibraryService_HostAddress = http://localhost:5008
+
+GET {{SILibraryService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
