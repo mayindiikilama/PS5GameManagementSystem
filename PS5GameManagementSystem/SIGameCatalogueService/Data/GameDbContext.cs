@@ -11,5 +11,11 @@ namespace SIGameCatalogueService.Data
         }
 
         public DbSet<Game> Games => Set<Game>();
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Game>()
+                .Property(g => g.Price)
+                .HasPrecision(10, 2);
+        }
     }
 }
