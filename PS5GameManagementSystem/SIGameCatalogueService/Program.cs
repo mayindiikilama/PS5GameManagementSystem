@@ -50,7 +50,17 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<GameDbContext>();
-    db.Database.Migrate();
+
+    if (!string.IsNullOrEmpty(databaseUrl))
+    {
+        // Render PostgreSQL
+        db.Database.EnsureCreated();
+    }
+    else
+    {
+        // Local SQL Server
+        db.Database.Migrate();
+    }
 }
 
 // Configure the HTTP request pipeline.
