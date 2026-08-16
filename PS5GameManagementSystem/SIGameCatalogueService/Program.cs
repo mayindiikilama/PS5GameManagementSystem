@@ -4,6 +4,9 @@ using SIGameCatalogueService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -23,7 +26,7 @@ if (!string.IsNullOrEmpty(databaseUrl))
     var connectionString = new NpgsqlConnectionStringBuilder
     {
         Host = databaseUri.Host,
-        Port = databaseUri.Port,
+        Port = databaseUri.IsDefaultPort ? 5432 : databaseUri.Port,
         Database = databaseUri.AbsolutePath.TrimStart('/'),
         Username = Uri.UnescapeDataString(userInfo[0]),
         Password = Uri.UnescapeDataString(userInfo[1]),
@@ -51,15 +54,23 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "SIGameCatalogueService v1");
+});
+
 
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapGet("/health", () => Results.Ok(new
+{
+    status = "healthy",
+    service = "PS5 Game Catalogue Service"
+}));
 
 app.MapControllers();
 
