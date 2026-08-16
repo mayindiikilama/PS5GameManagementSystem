@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SILibraryService.Data;
+using SILibraryService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,12 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<GameCatalogClient>(client =>
+{
+    var baseUrl = builder.Configuration["GameCatalogService:BaseUrl"];
+
+    client.BaseAddress = new Uri(baseUrl!);
+});
 
 var app = builder.Build();
 
