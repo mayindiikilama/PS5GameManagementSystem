@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SIConsoleClient": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
